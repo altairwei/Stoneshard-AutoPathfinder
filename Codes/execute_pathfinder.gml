@@ -22,21 +22,23 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
         // Find the closest mark
         if (_min_distance == -1 || _distance < _min_distance) {
             _min_distance = _distance
-            _closest_x = _gridX
-            _closest_y = _gridY
+            _closest_x = _x
+            _closest_y = _y
         }
     }
 }
 
 if (!is_undefined(_closest_x) && !is_undefined(_closest_y))
 {
-    if (scr_globaltile_get("isOpen", _closest_x, _closest_y))
-        scr_actionsLog("planTravelTo", [scr_id_get_name(o_player), scr_glmap_getTitle(_closest_x, _closest_y)])
+    var _gridX = _closest_x div 52
+    var _gridY = _closest_y div 52
+
+    if (scr_globaltile_get("isOpen", _gridX, _gridY))
+        scr_actionsLog("planTravelTo", [scr_id_get_name(o_player), scr_glmap_getTitle(_gridX, _gridY)])
     else
-        scr_actionsLog("planTravelToUnknown", [scr_id_get_name(o_player), string(_closest_x), string(_closest_y)])
+        scr_actionsLog("planTravelToUnknown", [scr_id_get_name(o_player), string(_gridX), string(_gridY)])
 
     global.pathfinder_dest = [_closest_x, _closest_y]
-
     auto_move_to_transition(_closest_x, _closest_y)
 }
 else
