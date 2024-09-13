@@ -73,7 +73,6 @@ function scr_move_player_to()
                     {
                         if (_path > Path20)
                         {
-                            scr_actionsLogUpdate("Target:\u00A0" + object_get_name(_target_id.object_index))
                             // Move to the end point ot path
                             with (o_player)
                                 context_target_id = _target_id

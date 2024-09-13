@@ -43,7 +43,36 @@ if (!is_undefined(_closest_x) && !is_undefined(_closest_y))
 }
 else
 {
-    scr_actionsLog("whereToGo", [scr_id_get_name(o_player)])
+    var _diaryTask = ds_map_find_value(global.journalDataMap, "diaryTask")
+    var _diaryQuest = ds_map_find_value(global.journalDataMap, "diaryQuest")
+    var _diaryMap = noone
+    if (_diaryTask != noone)
+        _diaryMap = (_diaryQuest ? ds_map_find_value(global.questsDataMap, _diaryTask) : scr_contract_get_map(_diaryTask))
+
+    if (_diaryMap == noone)
+    {
+        scr_actionsLog("whereToGo", [scr_id_get_name(o_player)])
+        exit
+    }
+
+    var _targetCoordsArray = scr_journalTaskGetCoords(_diaryMap, _diaryQuest)
+
+    if (_targetCoordsArray[0] == global.playerGridX && _targetCoordsArray[1] == global.playerGridY)
+    {
+        scr_actionsLog("whereToGo", [scr_id_get_name(o_player)])
+        exit
+    }
+
+    var _target_x = _targetCoordsArray[0] * 52 + 26
+    var _target_y = _targetCoordsArray[1] * 52 + 26
+
+    if (scr_globaltile_get("isOpen", _targetCoordsArray[0], _targetCoordsArray[1]))
+        scr_actionsLog("planTravelTo", [scr_id_get_name(o_player), scr_glmap_getTitle(_targetCoordsArray[0], _targetCoordsArray[1])])
+    else
+        scr_actionsLog("planTravelToUnknown", [scr_id_get_name(o_player), string(_targetCoordsArray[0]), string(_targetCoordsArray[1])])
+
+    global.pathfinder_dest = [_target_x, _target_y]
+    auto_move_to_transition(_target_x, _target_y)
 }
 
 

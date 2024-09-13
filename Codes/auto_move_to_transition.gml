@@ -66,27 +66,25 @@ function auto_move_to_transition()
         var _closest_gridX = closest_point[0] div 26
         var _closest_gridY = closest_point[1] div 26
 
-        scr_actionsLogUpdate("Found_closest_point:(" + string(_closest_gridX) + "," + string(_closest_gridY) + ")")
-
         // Activate certain o_tile_transition instances
         instance_activate_region((_closest_gridX - 2) * 26, (_closest_gridY - 2) * 26, (_closest_gridX + 2) * 26, (_closest_gridY + 2) * 26, true)
 
         var _door = noone
         with (o_tile_transition)
         {
-            //scr_actionsLogUpdate("Active_tile:(" + string(grid_x) + "," + string(grid_y) + ")")
             if (grid_x == _closest_gridX && grid_y == _closest_gridY)
                 _door = id
         }
 
         if (_door != noone)
         {
-            with (o_floor_target)
-            {
-                i_id = _door
-                path = scr_get_path_mp(i_id)
-                event_perform(ev_mouse, ev_global_left_press)
-            }
+            scr_move_player_to(_door.x, _door.y, _door)
+            // with (o_floor_target)
+            // {
+            //     i_id = _door
+            //     path = scr_get_path_mp(i_id)
+            //     event_perform(ev_mouse, ev_global_left_press)
+            // }
         }
     }
 }
