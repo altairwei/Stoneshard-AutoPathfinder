@@ -11,7 +11,7 @@ using ModShardLauncher.Mods;
 namespace AutoPathfinder;
 public class AutoPathfinder : Mod
 {
-    public override string Author => "Altair Wei";
+    public override string Author => "Altair Wei & Pong";
     public override string Name => "Auto Pathfinder";
     public override string Description => "Allows to have the player automatically travel to a quest destination or a location marked on the map.";
     public override string Version => "1.0.0.0";
@@ -41,18 +41,74 @@ public class AutoPathfinder : Mod
             .InsertBelow("                global.pathfinder_dest = noone")
             .Save();
 
-        // Trigger Alarm 2 when o_player was created in a new room
+
         Msl.LoadGML("gml_Object_o_player_Create_0")
             .MatchAll()
-            .InsertBelow("alarm[2] = 30") // After 30 steps
+            .InsertBelow("auto_move = true") 
             .Save();
-        Msl.LoadGML("gml_Object_o_player_Alarm_2")
-            .MatchAll()
-            .InsertBelow(ModFiles, "transition_handler.gml")
-            .Save();
+
+        Msl.LoadAssemblyAsString("gml_Object_o_player_Step_0")
+             .Apply(InsertCode)
+             .Save(); 
 
         Localization.ActionLogsPatching();
     }
+
+public static IEnumerable<string> InsertCode(IEnumerable<string> input)
+{
+    foreach (string item in input)
+    {
+        
+        if (item.Contains(":[end]"))
+        {
+            
+            yield return @"
+call.i gml_Script_is_allow_actions(argc=0)
+conv.v.b
+bf [1012]
+
+:[1009]
+push.v self.auto_move
+conv.v.b
+bf [1012]
+
+:[1010]
+push.s ""pathfinder_dest""
+conv.s.v
+call.i variable_global_exists(argc=1)
+conv.v.b
+bf [1012]
+
+:[1011]
+pushglb.v global.pathfinder_dest
+pushi.e -4
+cmp.i.v NEQ
+b [1013]
+
+:[1012]
+push.e 0
+
+:[1013]
+bf [end]
+
+:[1014]
+pushi.e 0
+pop.v.b self.auto_move
+pushi.e -5
+pushi.e 1
+push.v [array]global.pathfinder_dest
+pushi.e -5
+pushi.e 0
+push.v [array]global.pathfinder_dest
+call.i gml_Script_auto_move_to_transition(argc=2)
+popz.v
+";
+        }
+
+        
+        yield return item;
+    }
+}
 
     private static void ExportTable(string table)
     {
