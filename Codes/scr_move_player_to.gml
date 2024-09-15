@@ -5,9 +5,13 @@ function scr_move_player_to()
     var _target_id = noone
     var _path = noone
 
-    if (!is_undefined(argument2))
-    {
+    if (!is_undefined(argument2)) {
         _target_id = argument2
+    }
+
+    if (!is_undefined(argument3)) {
+        _path = argument3
+    } else if (_target_id != noone) {
         _path = scr_get_path_mp(_target_id)
     }
 
@@ -35,15 +39,15 @@ function scr_move_player_to()
 
         o_floor_target.alarm[2] = 2
 
-        with (o_player)
-        {
-            context_target_id = noone
-            if path
-            {
-                scr_stop_player()
-                return;
-            }
-        }
+        // with (o_player)
+        // {
+        //     context_target_id = noone
+        //     if path
+        //     {
+        //         scr_stop_player()
+        //         return;
+        //     }
+        // }
 
         var preditor = false
         var trap = collision_point(_targetX, _targetY, o_trap, 0, 0)
@@ -73,7 +77,7 @@ function scr_move_player_to()
                     {
                         if (_path > Path20)
                         {
-                            // Move to the end point ot path
+                            // Move to the end point of path
                             with (o_player)
                                 context_target_id = _target_id
                             scr_player_move(path_get_x(_path, 1), path_get_y(_path, 1))

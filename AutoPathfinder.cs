@@ -19,7 +19,9 @@ public class AutoPathfinder : Mod
 
     public override void PatchMod()
     {
+        Msl.AddFunction(ModFiles.GetCode("stop_auto_move.gml"), "stop_auto_move");
         Msl.AddFunction(ModFiles.GetCode("scr_move_player_to.gml"), "scr_move_player_to");
+        Msl.AddFunction(ModFiles.GetCode("calculate_closest_tile_transition.gml"), "calculate_closest_tile_transition");
         Msl.AddFunction(ModFiles.GetCode("auto_move_to_transition.gml"), "auto_move_to_transition");
 
         Msl.LoadGML("gml_Object_o_player_KeyPress_114") // F3
@@ -36,62 +38,78 @@ public class AutoPathfinder : Mod
         //                 }")
         //     .Save();
 
-        Msl.LoadGML("gml_GlobalScript_scr_stop_player")
-            .MatchFrom("                next_step = 1")
-            .InsertBelow("                global.pathfinder_dest = noone")
-            .Save();
-
-
         Msl.LoadGML("gml_Object_o_player_Create_0")
             .MatchAll()
-            .InsertBelow("auto_move = true") 
+            .InsertBelow("auto_move = true\ntile_transition = false")
+            .Save();
+
+        Msl.LoadGML("gml_Object_o_player_Other_17")
+            .MatchAll()
+            .InsertAbove("tile_transition = true")
+            .MatchAll()
+            .InsertBelow("tile_transition = false")
+            .Save();
+
+        Msl.LoadGML("gml_GlobalScript_scr_stop_player")
+            .MatchFrom("                path = -1")
+            .InsertBelow(@"
+            if (!tile_transition)
+                stop_auto_move()")
             .Save();
 
         Msl.LoadAssemblyAsString("gml_Object_o_player_Step_0")
              .Apply(InsertCode)
-             .Save(); 
+             .Save();
+
+        //InsertStopAutoMove();
 
         Localization.ActionLogsPatching();
     }
 
-public static IEnumerable<string> InsertCode(IEnumerable<string> input)
-{
-    foreach (string item in input)
+    private static IEnumerable<string> InsertCode(IEnumerable<string> input)
     {
-        
-        if (item.Contains(":[end]"))
+        foreach (string item in input)
         {
             
-            yield return @"
+            if (item.Contains(":[end]"))
+            {
+                
+                yield return @"
+call.i gml_Script_scr_is_cutscene(argc=0)
+conv.v.b
+not.b
+bf [1016]
+
+:[1012]
 call.i gml_Script_is_allow_actions(argc=0)
 conv.v.b
-bf [1012]
+bf [1016]
 
-:[1009]
+:[1013]
 push.v self.auto_move
 conv.v.b
-bf [1012]
+bf [1016]
 
-:[1010]
+:[1014]
 push.s ""pathfinder_dest""
 conv.s.v
 call.i variable_global_exists(argc=1)
 conv.v.b
-bf [1012]
+bf [1016]
 
-:[1011]
+:[1015]
 pushglb.v global.pathfinder_dest
 pushi.e -4
 cmp.i.v NEQ
-b [1013]
+b [1017]
 
-:[1012]
+:[1016]
 push.e 0
 
-:[1013]
+:[1017]
 bf [end]
 
-:[1014]
+:[1018]
 pushi.e 0
 pop.v.b self.auto_move
 pushi.e -5
@@ -103,12 +121,100 @@ push.v [array]global.pathfinder_dest
 call.i gml_Script_auto_move_to_transition(argc=2)
 popz.v
 ";
+            }
+
+            
+            yield return item;
+        }
+    }
+
+
+    private static void InsertStopAutoMove()
+    {
+        List<(string, string, string)> tupleList = new List<(string, string, string)>
+        {
+            ("gml_GlobalScript_scr_invisible_teleport", "    scr_stop_player()", "    stop_auto_move()"),
+            ("gml_GlobalScript_scr_penalty_enemy_attack", "                                            scr_stop_player()", "                                            stop_auto_move()"),
+            ("gml_GlobalScript_scr_simple_damage", "            scr_stop_player()", "            stop_auto_move()"),
+            ("gml_GlobalScript_scr_stateAttack", "                scr_stop_player()", "                stop_auto_move()"),
+            ("gml_Object_o_ambush_trigger_Step_0", "            scr_stop_player(1)", "            stop_auto_move()"),
+            ("gml_Object_o_Attitude_Other_12", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_close_panel_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_container_parent_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            // NOTE: cause a BUG?
+            ("gml_Object_o_contract_dialog_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_cutscene_start_trigger_Other_10", "            scr_stop_player(1)", "            stop_auto_move()"),
+            ("gml_Object_o_cutscene_teleporter_Alarm_0", "        scr_stop_player()", "        stop_auto_move()"),
+            ("gml_Object_o_db_nause_Other_10", "    scr_stop_player()", "    stop_auto_move()"),
+            ("gml_Object_o_delayed_move_grid_cutscene_Destroy_0", "    scr_stop_player()", "    stop_auto_move()"),
+            ("gml_Object_o_enemy_Other_11", "        scr_stop_player()", "        stop_auto_move()"),
+            ("gml_Object_o_environmentPhraseTrigger_Other_10", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_exploreMenu_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_floor_target_Mouse_53", "            scr_stop_player()", "            stop_auto_move()"),
+            ("gml_Object_o_globalmap_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_inv_consum_medicine_tab_Other_24", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_inv_switch_Other_10", "                    scr_stop_player()", "                    stop_auto_move()"),
+            ("gml_Object_o_journal_Other_11", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_open_map_Create_0", "scr_stop_player()", "stop_auto_move()"),
+            // NOTE: o_player_Other_17 will stop auto moving when enter a new map.
+            //("gml_Object_o_player_Other_17", "                scr_stop_player()", "                stop_auto_move()"),
+            // NOTE: relate to keyborad movement?
+            //("gml_Object_o_player_Step_0", "            scr_stop_player(true)", "            stop_auto_move()"),
+            ("gml_Object_o_skill_Other_12", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_skill_stone_armor_Other_13", "scr_stop_player()", "stop_auto_move()"),
+            ("gml_Object_o_skill_trap_search_Other_13", "        scr_stop_player()", "        stop_auto_move()"),
+            ("gml_Object_o_teleport_Alarm_0", "        scr_stop_player()", "        stop_auto_move()"),
+            ("gml_Object_o_vampire_guard_Other_17", "    scr_stop_player()", "    stop_auto_move()")
+        };
+
+        foreach (var (script, matchline, insertion) in tupleList)
+        {
+            Msl.LoadGML(script)
+                .MatchFrom(matchline)
+                .InsertBelow(insertion)
+                .Save();
         }
 
-        
-        yield return item;
+        Msl.LoadGML("gml_GlobalScript_scr_stateTheat")
+            .MatchFrom("            scr_stop_player()")
+            .ReplaceBy(@"        {
+            scr_stop_player()
+            stop_auto_move()
+        }")
+            .Save();
+
+        Msl.LoadGML("gml_Object_o_floor_target_Mouse_54")
+            .MatchFrom("            scr_stop_player()")
+            .ReplaceBy(@"        {
+            scr_stop_player()
+            stop_auto_move()
+        }")
+            .Save();
+
+        Msl.LoadGML("gml_Object_o_floor_target_Other_11")
+            .MatchFrom("                                    scr_stop_player()")
+            .ReplaceBy(@"                                {
+                                    scr_stop_player()
+                                    stop_auto_move()
+                                }")
+            .Save();
+
+        Msl.LoadGML("gml_Object_o_loot_Mouse_7")
+            .MatchFrom("                    scr_stop_player()")
+            .ReplaceBy(@"                {
+                    scr_stop_player()
+                    stop_auto_move()
+                }")
+            .Save();
+
+        Msl.LoadGML("gml_Object_o_poison_platetrap_Other_13")
+            .MatchFrom("            scr_stop_player()")
+            .ReplaceBy(@"        {
+            scr_stop_player()
+            stop_auto_move()
+        }")
+            .Save();
     }
-}
 
     private static void ExportTable(string table)
     {

@@ -28,6 +28,8 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
     }
 }
 
+//scr_actionsLogUpdate("Room_Name:\u00A0" + room_get_name(room))
+
 if (!is_undefined(_closest_x) && !is_undefined(_closest_y))
 {
     var _gridX = _closest_x div 52
