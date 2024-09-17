@@ -17,6 +17,7 @@ function auto_move_to_transition()
     {
         // Follow the relative positions marked on the map to the corresponding point in the current room
         scr_move_player_to(_offsetX / 52 * room_width, _offsetY / 52 * room_height)
+        stop_auto_move()
     }
     else
     {
@@ -36,12 +37,16 @@ function auto_move_to_transition()
         // Activate certain o_tile_transition instances
         instance_activate_region((_closest_gridX - 2) * 26, (_closest_gridY - 2) * 26, (_closest_gridX + 2) * 26, (_closest_gridY + 2) * 26, true)
 
+        // Search for o_tile_transition
         var _door = noone
         with (o_tile_transition)
         {
             if (grid_x == _closest_gridX && grid_y == _closest_gridY)
                 _door = id
         }
+
+        if (_door == noone)
+            _door = find_exit_door()
 
         if (_door != noone)
         {
@@ -57,6 +62,10 @@ function auto_move_to_transition()
             //     path = scr_get_path_mp(i_id)
             //     event_perform(ev_mouse, ev_global_left_press)
             // }
+        }
+        else
+        {
+            scr_actionsLog("doorNotExist", [scr_id_get_name(o_player)])
         }
     }
 }

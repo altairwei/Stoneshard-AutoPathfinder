@@ -29,6 +29,11 @@ public class Localization
         text_zh = @"~w~$~/~发现远处被障碍物挡住了，需要换个位置重新规划行程。";
         logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
 
+        id = "doorNotExist";
+        text_en = @"~w~$~/~ couldn't find any exit or roads.";
+        text_zh = @"~w~$~/~找不到任何出口或道路。";
+        logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
+
         string logtextend = ";" + string.Concat(Enumerable.Repeat("text_end;", 12));
 
         List<string> log_table = ModLoader.GetTable("gml_GlobalScript_table_log_text");

@@ -22,6 +22,7 @@ public class AutoPathfinder : Mod
         Msl.AddFunction(ModFiles.GetCode("stop_auto_move.gml"), "stop_auto_move");
         Msl.AddFunction(ModFiles.GetCode("scr_move_player_to.gml"), "scr_move_player_to");
         Msl.AddFunction(ModFiles.GetCode("calculate_closest_tile_transition.gml"), "calculate_closest_tile_transition");
+        Msl.AddFunction(ModFiles.GetCode("find_exit_door.gml"), "find_exit_door");
         Msl.AddFunction(ModFiles.GetCode("auto_move_to_transition.gml"), "auto_move_to_transition");
 
         Msl.LoadGML("gml_Object_o_player_KeyPress_114") // F3
@@ -30,13 +31,13 @@ public class AutoPathfinder : Mod
             .Save();
 
         // DELETE ME!
-        // Msl.LoadGML("gml_Object_o_floor_target_Mouse_53")
-        //     .MatchFrom("                            scr_player_move(path_get_x(path, 1), path_get_y(path, 1))")
-        //     .ReplaceBy(@"                        {
-        //                     scr_player_move(path_get_x(path, 1), path_get_y(path, 1))
-        //                     scr_actionsLogUpdate(""Target:\u00A0"" + object_get_name(target_id.object_index))
-        //                 }")
-        //     .Save();
+        Msl.LoadGML("gml_Object_o_floor_target_Mouse_53")
+            .MatchFrom("                            scr_player_move(path_get_x(path, 1), path_get_y(path, 1))")
+            .ReplaceBy(@"                        {
+                            scr_player_move(path_get_x(path, 1), path_get_y(path, 1))
+                            scr_actionsLogUpdate(""Target:\u00A0~lg~"" + object_get_name(target_id.object_index) + ""~/~\u00A0in\u00A0~y~"" + room_get_name(room) + ""~/~"")
+                        }")
+            .Save();
 
         Msl.LoadGML("gml_Object_o_player_Create_0")
             .MatchAll()
