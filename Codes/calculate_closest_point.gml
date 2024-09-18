@@ -1,4 +1,4 @@
-function calculate_closest_tile_transition()
+function calculate_closest_point()
 {
     var _target_x = argument0
     var _target_y = argument1

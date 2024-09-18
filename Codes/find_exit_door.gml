@@ -2,6 +2,8 @@ function find_exit_door()
 {
     var _door = noone
 
+    // TODO: Activate door objects outside the player's vision?
+
     switch (room_get_name(room)) {
         case "r_tavern_GoldenSpikeInn1floor":
             _door = instance_find(o_Doors_all_small, 0)

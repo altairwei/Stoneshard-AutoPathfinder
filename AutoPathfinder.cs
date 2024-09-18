@@ -21,7 +21,8 @@ public class AutoPathfinder : Mod
     {
         Msl.AddFunction(ModFiles.GetCode("stop_auto_move.gml"), "stop_auto_move");
         Msl.AddFunction(ModFiles.GetCode("scr_move_player_to.gml"), "scr_move_player_to");
-        Msl.AddFunction(ModFiles.GetCode("calculate_closest_tile_transition.gml"), "calculate_closest_tile_transition");
+        Msl.AddFunction(ModFiles.GetCode("calculate_closest_point.gml"), "calculate_closest_point");
+        Msl.AddFunction(ModFiles.GetCode("find_nearest_tile_transition.gml"), "find_nearest_tile_transition");
         Msl.AddFunction(ModFiles.GetCode("find_exit_door.gml"), "find_exit_door");
         Msl.AddFunction(ModFiles.GetCode("auto_move_to_transition.gml"), "auto_move_to_transition");
 

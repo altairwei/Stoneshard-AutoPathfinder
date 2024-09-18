@@ -26,7 +26,7 @@ function auto_move_to_transition()
         var _local_y = (_gridY - global.playerGridY + _offsetY / 52) * room_height
 
         // Find nearest map door
-        var closest_point = calculate_closest_tile_transition(_local_x, _local_y)
+        var closest_point = calculate_closest_point(_local_x, _local_y)
 
         if (is_undefined(closest_point))
             return
@@ -34,16 +34,9 @@ function auto_move_to_transition()
         var _closest_gridX = closest_point[0] div 26
         var _closest_gridY = closest_point[1] div 26
 
-        // Activate certain o_tile_transition instances
-        instance_activate_region((_closest_gridX - 2) * 26, (_closest_gridY - 2) * 26, (_closest_gridX + 2) * 26, (_closest_gridY + 2) * 26, true)
-
         // Search for o_tile_transition
-        var _door = noone
-        with (o_tile_transition)
-        {
-            if (grid_x == _closest_gridX && grid_y == _closest_gridY)
-                _door = id
-        }
+        // 可能把人导入海里。
+        var _door = find_nearest_tile_transition(closest_point[0], closest_point[1])
 
         if (_door == noone)
             _door = find_exit_door()
