@@ -14,7 +14,7 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
     var _offsetX = _x - _gridX * 52
     var _offsetY = _y - _gridY * 52
 
-    if (_mark == s_glmap_mark_user_Flag)
+    if (sprite_get_name(_mark) == "s_glmap_mark_user_" + global.map_mark_type)
     {
         // Calculate distance
         var _distance = point_distance(_gridX, _gridY, global.playerGridX, global.playerGridY);

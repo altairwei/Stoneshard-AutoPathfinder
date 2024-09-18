@@ -26,6 +26,12 @@ public class AutoPathfinder : Mod
         Msl.AddFunction(ModFiles.GetCode("find_exit_door.gml"), "find_exit_door");
         Msl.AddFunction(ModFiles.GetCode("auto_move_to_transition.gml"), "auto_move_to_transition");
 
+        Msl.AddMenu("Auto Pathfinder", new UIComponent(
+            name: "Map Mark", associatedGlobal: "map_mark_type", UIComponentType.ComboBox,
+            new string[] {  "Flag", "Grave", "Sword", "Crown", "Bow", "Diamond",
+                            "Arrow", "Food", "Tower", "Cross", "Chest", "Skull"})
+        );
+
         Msl.LoadGML("gml_Object_o_player_KeyPress_114") // F3
             .MatchAll()
             .InsertBelow(ModFiles, "execute_pathfinder.gml")
