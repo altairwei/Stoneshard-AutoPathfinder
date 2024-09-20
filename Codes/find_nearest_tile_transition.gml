@@ -3,33 +3,44 @@ function find_nearest_tile_transition()
     var _point_x = argument0
     var _point_y = argument1
 
-    var _tile_transition = noone
-    var _min_distance = -1
+    // Array to store instances and their distances
+    var instances_with_distance = []
 
+    // Activate all o_tile_transition instances
     instance_activate_object(o_tile_transition)
 
+    // Iterate over all o_tile_transition instances and calculate the distance
     with (o_tile_transition)
     {
         var _dist = point_distance(_point_x, _point_y, x, y)
-        if (_min_distance == -1 || _dist < _min_distance) {
-            _min_distance = _dist
-            _tile_transition = id
+        array_push(instances_with_distance, [id, _dist])
+    }
+
+    // Implement bubble sort to sort the array manually by distance
+    var n = array_length(instances_with_distance)
+    var temp
+
+    for (var i = 0; i < n - 1; i++) {
+        for (var j = 0; j < n - 1 - i; j++) {
+            if (instances_with_distance[j][1] > instances_with_distance[j + 1][1]) {
+                // Swap the two elements
+                temp = instances_with_distance[j]
+                instances_with_distance[j] = instances_with_distance[j + 1]
+                instances_with_distance[j + 1] = temp
+            }
         }
     }
 
-    if (_min_distance > max(room_height, room_width) / 4)
-        _tile_transition = noone
+    // Extract the sorted instance IDs
+    var sorted_instance_ids = []
+
+    for (var i = 0; i < array_length(instances_with_distance); i++) {
+        array_push(sorted_instance_ids, instances_with_distance[i][0])
+    }
 
     // Deactivate instances that were previously inactive
-    with (o_cullingController)
-    {
-        var list_size = ds_list_size(deactivatedInstancesList)
-        for (var i = 0; i < list_size; i++) {
-            var inst = ds_list_find_value(deactivatedInstancesList, i)
-            if (instance_exists(inst) && inst.object_index == o_tile_transition && inst != _tile_transition)
-                instance_deactivate_object(inst)
-        }
-    }
+    redeactivate_instances(o_tile_transition)
 
-    return _tile_transition
+    // Return the sorted instance ID list
+    return sorted_instance_ids
 }

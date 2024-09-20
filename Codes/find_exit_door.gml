@@ -1,25 +1,38 @@
 function find_exit_door()
 {
-    var _door = noone
+    var _doors = []
+    var _types = [
+        o_Doors_all_big, o_Doors_all_small, o_villageDoorsExit,
+        o_villageDoorsEnter, o_Doors_all_small_exit, o_Doors_all_big_exit,
+        o_stairs_up, o_SpikeTavern2floor_stairsdown]
 
-    // TODO: Activate door objects outside the player's vision?
+    for (var i = 0; i < array_length(_types); i++)
+        instance_activate_object(_types[i])
 
     switch (room_get_name(room)) {
         case "r_tavern_GoldenSpikeInn1floor":
-            _door = instance_find(o_Doors_all_small, 0)
+            with (o_Doors_all_small)
+                _doors = [id]
             break
 
         case "r_tavern_GoldenSpikeInn2floor":
-            _door = instance_find(o_SpikeTavern2floor_stairsdown, 0)
+            with (o_SpikeTavern2floor_stairsdown)
+                _doors = [id]
             break
 
         case "r_tavernWillow1floor":
             with (o_Doors_all_small_exit)
             {
                 if (position_tag == "Roadtavern02_01")
-                    _door = id
+                    _doors = [id]
             }
             break
+
+        case "r_BrynnCathedral1floor":
+            with (o_Doors_all_big_exit)
+                _doors = [id]
+            break
+
         case "r_Brynn_NW":
         case "r_Brynn_NE":
         case "r_Brynn_SW":
@@ -40,11 +53,11 @@ function find_exit_door()
                     var _dist = point_distance(o_player.x, o_player.y, x, y)
                     if (_min_distance == -1 || _dist < _min_distance) {
                         _min_distance = _dist
-                        _door = id
+                        _doors = [id]
                     }
                 }
 
-                if (_door != noone) {
+                if (array_length(_doors) != 0) {
                     break
                 }
             }
@@ -52,11 +65,21 @@ function find_exit_door()
     }
 
     // Find a out door in a dungeon
-    if (_door == noone)
+    if (array_length(_doors) == 0)
     {
         with (o_stairs_up)
-            _door = id
+            _doors = [id]
     }
 
-    return _door
+    with (o_cullingController)
+    {
+        var list_size = ds_list_size(deactivatedInstancesList)
+        for (var i = 0; i < list_size; i++) {
+            var inst = ds_list_find_value(deactivatedInstancesList, i)
+            if (instance_exists(inst))
+                instance_deactivate_object(inst)
+        }
+    }
+
+    return _doors
 }

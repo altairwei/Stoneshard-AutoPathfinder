@@ -19,6 +19,7 @@ public class AutoPathfinder : Mod
 
     public override void PatchMod()
     {
+        Msl.AddFunction(ModFiles.GetCode("redeactivate_instances.gml"), "redeactivate_instances");
         Msl.AddFunction(ModFiles.GetCode("stop_auto_move.gml"), "stop_auto_move");
         Msl.AddFunction(ModFiles.GetCode("scr_move_player_to.gml"), "scr_move_player_to");
         Msl.AddFunction(ModFiles.GetCode("calculate_closest_point.gml"), "calculate_closest_point");

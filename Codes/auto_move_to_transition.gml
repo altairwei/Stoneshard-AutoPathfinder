@@ -35,26 +35,48 @@ function auto_move_to_transition()
         var _closest_gridY = closest_point[1] div 26
 
         // Search for o_tile_transition
-        // 可能把人导入海里。
-        var _door = find_nearest_tile_transition(closest_point[0], closest_point[1])
+        var _door_array = find_nearest_tile_transition(closest_point[0], closest_point[1])
 
-        if (_door == noone)
-            _door = find_exit_door()
+        if (array_length(_door_array) == 0)
+            _door_array = find_exit_door()
 
-        if (_door != noone)
+        if (array_length(_door_array) != 0)
         {
-            var _path = scr_get_path_mp(_door)
-            if (_path > Path20)
+            var _path = noone
+            var _door = noone
+            for (var i = 0; i < array_length(_door_array); i++)
+            {
+                var _door_check = _door_array[i]
+
+                // Active instance first, then we can calculate the path to it
+                var _is_inactive = false
+                with (o_cullingController)
+                    _is_inactive = ds_list_find_index(deactivatedInstancesList, _door_check) != -1
+
+                instance_activate_object(_door_check)
+
+                // Check if the door is accessible
+                var _path_check = scr_get_path_mp(_door_check)
+                if (_path_check > Path20)
+                {
+                    _path = _path_check
+                    _door = _door_check
+                    break
+                }
+                else
+                {
+                    // Deactivate the instance that is inaccessible
+                    if (_is_inactive)
+                    {
+                        instance_deactivate_object(_door_check)
+                    }
+                }
+            }
+
+            if (_path != noone && _door != noone)
                 scr_move_player_to(_door.x, _door.y, _door, _path)
             else
                 scr_actionsLog("doorInaccessible", [scr_id_get_name(o_player)])
-
-            // with (o_floor_target)
-            // {
-            //     i_id = _door
-            //     path = scr_get_path_mp(i_id)
-            //     event_perform(ev_mouse, ev_global_left_press)
-            // }
         }
         else
         {
