@@ -14,7 +14,7 @@ public class AutoPathfinder : Mod
     public override string Author => "Altair Wei & Pong";
     public override string Name => "Auto Pathfinder";
     public override string Description => "Allows to have the player automatically travel to a quest destination or a location marked on the map.";
-    public override string Version => "1.0.0.0";
+    public override string Version => "1.0.1";
     public override string TargetVersion => "0.8.2.10";
 
     public override void PatchMod()
