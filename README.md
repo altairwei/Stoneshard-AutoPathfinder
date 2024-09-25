@@ -14,8 +14,8 @@ This mod provides players of Stoneshard with the convenient feature of auto-walk
 1. Download the [ModShardLauncher](https://github.com/ModShardTeam/ModShardLauncher) and extract it anywhere.
 2. Run `ModShardLauncher.exe` once and close it.
 3. Locate your game's installation folder:
-   1. Steam: `C:\SteamLibrary\steamapps\common\Stoneshard`
-   2. GOG : `C:\Games\Stoneshard`
+   * Steam: `C:\SteamLibrary\steamapps\common\Stoneshard`
+   * GOG : `C:\Games\Stoneshard`
 4. Rename `data.win` to `vanilla.win`.
 5. Download `AutoPathfinder.zip` from [NexusMod](https://www.nexusmods.com/stoneshard/mods/34).
 6. Place `AutoPathfinder.sml` in ModShardLauncher's `Mods` folder.
