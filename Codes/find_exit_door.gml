@@ -10,6 +10,24 @@ function find_exit_door()
         instance_activate_object(_types[i])
 
     switch (room_get_name(room)) {
+        case "r_villagehall01inside":
+            with (o_Doors_all_small_exit)
+            {
+                if (position_tag == "r_Osbrookvillagehall")
+                    _doors = [id]
+            }
+            break
+
+        case "r_tavernmannshireinside1floor":
+            with (o_Doors_all_small_exit)
+                _doors = [id]
+            break
+
+        case "r_tavernmannshireinside2floor":
+            with (o_mannshireavern4floorladderup)
+                _doors = [id]
+            break
+
         case "r_tavern_GoldenSpikeInn1floor":
             with (o_Doors_all_small)
                 _doors = [id]
