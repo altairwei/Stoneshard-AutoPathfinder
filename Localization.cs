@@ -24,6 +24,11 @@ public class Localization
         text_zh = @"~w~$~/~不知道要往哪去。";
         logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
 
+        id = "whereToGoMultiMarkers";
+        text_en = @"~w~$~/~ don't know ~lg~which~/~ of the ~r~$~/~ marked locations to travel to?";
+        text_zh = @"~w~$~/~不知道应该前往这~r~$~/~个标记地点的~lg~哪一个~/~？";
+        logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
+
         id = "doorInaccessible";
         text_en = @"~w~$~/~ noticed that the far side was blocked by an obstacle and needed to change position to re-plan the journey.";
         text_zh = @"~w~$~/~发现远处被障碍物挡住了，需要换个位置重新规划行程。";

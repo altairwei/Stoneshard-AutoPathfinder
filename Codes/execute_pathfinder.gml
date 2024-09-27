@@ -3,6 +3,7 @@ var _closest_y = undefined
 var _min_distance = -1
 
 var _userMarksListSize = ds_list_size(global.globalmapUserMarksList)
+var _userMarksNumber = _userMarksListSize / 4
 for (_i = 0; _i < _userMarksListSize; _i += 4)
 {
     _mark = asset_get_index(ds_list_find_value(global.globalmapUserMarksList, _i))
@@ -32,6 +33,12 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
 
 if (!is_undefined(_closest_x) && !is_undefined(_closest_y))
 {
+    if (_userMarksNumber > 1 && !global.go_to_nearest_mark)
+    {
+        scr_actionsLog("whereToGoMultiMarkers", [scr_id_get_name(o_player), _userMarksNumber])
+        exit
+    }
+
     var _gridX = _closest_x div 52
     var _gridY = _closest_y div 52
 

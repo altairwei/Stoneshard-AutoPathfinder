@@ -14,7 +14,7 @@ public class AutoPathfinder : Mod
     public override string Author => "Altair Wei & Pong";
     public override string Name => "Auto Pathfinder";
     public override string Description => "Allows to have the player automatically travel to a quest destination or a location marked on the map.";
-    public override string Version => "1.0.1";
+    public override string Version => "1.1.0";
     public override string TargetVersion => "0.8.2.10";
 
     public override void PatchMod()
@@ -27,10 +27,15 @@ public class AutoPathfinder : Mod
         Msl.AddFunction(ModFiles.GetCode("find_exit_door.gml"), "find_exit_door");
         Msl.AddFunction(ModFiles.GetCode("auto_move_to_transition.gml"), "auto_move_to_transition");
 
-        Msl.AddMenu("Auto Pathfinder", new UIComponent(
-            name: "Map Mark", associatedGlobal: "map_mark_type", UIComponentType.ComboBox,
-            new string[] {  "Flag", "Grave", "Sword", "Crown", "Bow", "Diamond",
-                            "Arrow", "Food", "Tower", "Cross", "Chest", "Skull"})
+        Msl.AddMenu(
+            "Auto Pathfinder",
+            new UIComponent(
+                name: "Map Mark", associatedGlobal: "map_mark_type", UIComponentType.ComboBox,
+                new string[] {  "Flag", "Grave", "Sword", "Crown", "Bow", "Diamond",
+                                "Arrow", "Food", "Tower", "Cross", "Chest", "Skull"}),
+            new UIComponent(
+                name: "If multiple marks exist, go to the nearest", associatedGlobal: "go_to_nearest_mark",
+                UIComponentType.CheckBox, 0)
         );
 
         Msl.LoadGML("gml_Object_o_player_KeyPress_114") // F3

@@ -4,8 +4,8 @@ This mod provides players of Stoneshard with the convenient feature of auto-walk
 
 ## Features
 
-- **Destination Marking**: Use the "Flag" icon on the map (customizable in settings) to mark areas you wish to visit.
-- **Quest Activation**: Activate a quest that requires you to go to a specific location, automatically setting your destination.
+- **Destination Marking**: Use the "Flag" icon on the map (customizable in settings) to mark areas you wish to visit.  If multiple markers exist on the map, go to the nearest location (can be turned off in settings).
+- **Quest Activation**: Activate a quest that requires you to go to a specific location, automatically setting your destination. If a map marker exists, priority is given to travelling to the marked location.
 - **Auto-Walk**: Press F3 to enable auto-walking towards your designated destination.
 - **Dynamic Stop**: The player will automatically stop when encountering enemies or spotting prey, ensuring safety.
 
