@@ -2,8 +2,12 @@ var _closest_x = undefined
 var _closest_y = undefined
 var _min_distance = -1
 
+var _mark_type = "Flag"
+if (variable_global_exists("map_mark_type") && is_string(global.map_mark_type) && global.map_mark_type != "0")
+    _mark_type = global.map_mark_type
+
 var _userMarksListSize = ds_list_size(global.globalmapUserMarksList)
-var _userMarksNumber = _userMarksListSize / 4
+var _userMarksNumberFound = 0
 for (_i = 0; _i < _userMarksListSize; _i += 4)
 {
     _mark = asset_get_index(ds_list_find_value(global.globalmapUserMarksList, _i))
@@ -15,8 +19,10 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
     var _offsetX = _x - _gridX * 52
     var _offsetY = _y - _gridY * 52
 
-    if (sprite_get_name(_mark) == "s_glmap_mark_user_" + global.map_mark_type)
+    if (sprite_get_name(_mark) == "s_glmap_mark_user_" + _mark_type)
     {
+        _userMarksNumberFound++
+
         // Calculate distance
         var _distance = point_distance(_gridX, _gridY, global.playerGridX, global.playerGridY);
 
@@ -33,9 +39,9 @@ for (_i = 0; _i < _userMarksListSize; _i += 4)
 
 if (!is_undefined(_closest_x) && !is_undefined(_closest_y))
 {
-    if (_userMarksNumber > 1 && !global.go_to_nearest_mark)
+    if (_userMarksNumberFound > 1 && !global.go_to_nearest_mark)
     {
-        scr_actionsLog("whereToGoMultiMarkers", [scr_id_get_name(o_player), _userMarksNumber])
+        scr_actionsLog("whereToGoMultiMarkers", [scr_id_get_name(o_player), _userMarksNumberFound])
         exit
     }
 
