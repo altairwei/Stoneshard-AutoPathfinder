@@ -30,7 +30,7 @@ public class AutoPathfinder : Mod
         Msl.AddMenu(
             "Auto Pathfinder",
             new UIComponent(
-                name: "Map Mark", associatedGlobal: "map_mark_type", UIComponentType.ComboBox,
+                name: "Map Marker", associatedGlobal: "map_mark_type", UIComponentType.ComboBox,
                 new string[] {  "Flag", "Grave", "Sword", "Crown", "Bow", "Diamond",
                                 "Arrow", "Food", "Tower", "Cross", "Chest", "Skull"}),
             new UIComponent(

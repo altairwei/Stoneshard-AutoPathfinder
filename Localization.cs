@@ -25,7 +25,7 @@ public class Localization
         logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
 
         id = "whereToGoMultiMarkers";
-        text_en = @"~w~$~/~ don't know ~lg~which~/~ of the ~r~$~/~ marked locations to travel to?";
+        text_en = @"~w~$~/~ doesn't know ~lg~which~/~ of the ~r~$~/~ marked locations to travel to?";
         text_zh = @"~w~$~/~不知道应该前往这~r~$~/~个标记地点的~lg~哪一个~/~？";
         logList.Add($"{id};{text_en};{text_en};{text_zh};" + string.Concat(Enumerable.Repeat($"{text_en};", 9)));
 
