@@ -51,7 +51,6 @@ jobs:
         id: sha
         run: |
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-          echo ${{ steps.sha.outputs.sha }}
 
   create_sml_and_publish:
     runs-on: ubuntu-latest
@@ -85,6 +84,6 @@ jobs:
         path: ${{ github.event.repository.name }}.zip
   
     - name: Create Release
-      run: gh release create ${{ github.ref_name }} -t "v${{ github.ref_name }}" ${{ github.event.repository.name }}.zip --generate-notes
+      run: gh release create ${{ github.ref_name }} -t "${{ github.ref_name }}" ${{ github.event.repository.name }}.zip --generate-notes
       env:
         GITHUB_TOKEN: ${{ github.TOKEN }}
