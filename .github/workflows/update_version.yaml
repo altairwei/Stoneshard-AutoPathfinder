@@ -67,8 +67,10 @@ jobs:
 
     # Download msp
     - name: Download MSP
-      run: dotnet tool install --global ModShardPacker --version 1.3.2
-    
+      run: |
+        git clone https://github.com/altairwei/ModShardPacker.git
+        dotnet tool install --global ModShardPacker --add-source ./ModShardPacker
+
     # Run msp and add to release
     - name: Run MSP
       run: |
