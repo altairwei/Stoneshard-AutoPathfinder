@@ -75,6 +75,23 @@ public class AutoPathfinder : Mod
              .Apply(InsertCode)
              .Save();
 
+        Msl.LoadGML("gml_Object_o_globalmapMarkUserContext_Other_25")
+            .MatchFrom("var _mark = scr_globalmapMarkCreate")
+            .InsertAbove(@"
+            var _mark_type = ""Flag""
+            if (variable_global_exists(""map_mark_type"") && is_string(global.map_mark_type) && global.map_mark_type != ""0"")
+                _mark_type = global.map_mark_type
+            var _target_sprite = asset_get_index(""s_glmap_mark_user_"" + _mark_type)
+            if (!global.go_to_nearest_mark && other.markSpriteIndex == _target_sprite)
+            {
+                with (o_globalmapMarkUser)
+                {
+                    if (sprite_index == _target_sprite)
+                        instance_destroy()
+                }
+            }")
+            .Save();
+
         //InsertStopAutoMove();
 
         Localization.ActionLogsPatching();
