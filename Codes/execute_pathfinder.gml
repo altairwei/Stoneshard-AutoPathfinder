@@ -1,6 +1,7 @@
 var _closest_x = undefined
 var _closest_y = undefined
 var _min_distance = -1
+global.step_diagonal_count = 0
 
 var _mark_type = "Flag"
 if (variable_global_exists("map_mark_type") && is_string(global.map_mark_type) && global.map_mark_type != "0")

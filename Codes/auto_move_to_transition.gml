@@ -1,5 +1,6 @@
 function auto_move_to_transition()
 {
+	var is_diagonal_move
     // Convert coordinates of the map marker
     var _x = argument0
     var _y = argument1
@@ -21,6 +22,35 @@ function auto_move_to_transition()
     }
     else
     {
+		
+		//region DiagonalSupport
+        global.step_diagonal_count++
+        is_diagonal_move = (global.step_diagonal_count % 2) == 0
+        var dx = (global.playerGridX < _gridX ? 1 : (global.playerGridX > _gridX ? -1 : 0))
+        var dy = (global.playerGridY < _gridY ? 1 : (global.playerGridY > _gridY ? -1 : 0))
+        var xOffset = global.playerGridX - _gridX
+        var yOffset = global.playerGridY - _gridY
+		//
+        var is_diagonal = (dx != 0 && dy != 0)
+        var is_diagonal_condition_met = (abs(xOffset) == abs(yOffset) || is_diagonal_move)
+		//
+        if (is_diagonal && is_diagonal_condition_met)
+        {
+            instance_activate_object(o_tile_transition)
+            with (o_tile_transition)
+            {
+                if (dX == dx && dY == dy)
+                {
+                    if (scr_get_path_mp(id) != -4)
+                    {
+                        scr_move_player_to(x, y, id, scr_get_path_mp(id))
+                        return;
+                    }
+                }
+            }
+        }
+		//endregion
+		
         // Convert map markers coordinates to room coordinates
         var _local_x = (_gridX - global.playerGridX + _offsetX / 52) * room_width
         var _local_y = (_gridY - global.playerGridY + _offsetY / 52) * room_height

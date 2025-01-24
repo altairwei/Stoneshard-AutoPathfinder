@@ -41,8 +41,8 @@ public class Localization
 
         string logtextend = ";" + string.Concat(Enumerable.Repeat("text_end;", 12));
 
-        List<string> log_table = ModLoader.GetTable("gml_GlobalScript_table_log_text");
+        List<string> log_table = ModLoader.GetTable("gml_GlobalScript_table_log");
         log_table.InsertRange(log_table.IndexOf(logtextend), logList);
-        ModLoader.SetTable(log_table, "gml_GlobalScript_table_log_text");
+        ModLoader.SetTable(log_table, "gml_GlobalScript_table_log");
     }
 }

@@ -67,7 +67,7 @@ function scr_move_player_to()
                     trap = (trap.image_alpha > 0 && (!trap.is_disarm))
                 if (_target_id == noone && !trap)
                 {
-                    var _freeCellCoordsArray = scr_mpgridFindNearestFreeCell(o_controller.grid, _targetGridX, _targetGridY)
+                    var _freeCellCoordsArray = scr_mpgridFindNearestFreeCell(o_controller.newgrid, _targetGridX, _targetGridY)
                     if (_freeCellCoordsArray[0] != noone && _freeCellCoordsArray[1] != noone)
                         scr_player_move((_freeCellCoordsArray[0] * 26), (_freeCellCoordsArray[1] * 26))
                 }
